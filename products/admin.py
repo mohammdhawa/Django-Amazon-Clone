@@ -4,6 +4,7 @@ from .models import Product, ProductImages, Brand, Review
 # Register your models here.
 
 admin.site.register(Brand)
+admin.site.register(Review)
 
 
 class ProductImagesAdmin(admin.TabularInline):

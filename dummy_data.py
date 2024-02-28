@@ -55,4 +55,21 @@ def seed_users(n):
         )
 
 
-seed_users(10)
+def seed_reviews(n):
+    fake = Faker()
+
+    users = User.objects.all()
+
+    products = Product.objects.all()
+
+    for _ in range(n):
+        Review.objects.create(
+            user=users[random.randint(0, len(users) - 1)],
+            product=products[random.randint(0, len(products) - 1)],
+            review=fake.text(max_nb_chars=500),
+            rate=random.randint(1, 5),
+            created_at=fake.date_time_this_year(),
+        )
+
+
+seed_reviews(500)
