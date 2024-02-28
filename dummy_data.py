@@ -41,8 +41,18 @@ def seed_product(n):
             sku=random.randint(10000, 99999),
             subtitle=fake.text(max_nb_chars=450),
             description=fake.text(max_nb_chars=3000),
-            brand=brands[random.randint(0, len(brands)-1)]
+            brand=brands[random.randint(0, len(brands) - 1)]
         )
 
 
-seed_product(500)
+def seed_users(n):
+    fake = Faker()
+
+    for _ in range(n):
+        User.objects.create(
+            username=fake.user_name(),
+            password='MoH.1822'
+        )
+
+
+seed_users(10)
