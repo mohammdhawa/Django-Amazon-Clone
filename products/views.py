@@ -26,3 +26,8 @@ class BrandListView(ListView):
 
 class BrandDetailView(DetailView):
     model = Brand
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['products'] = Product.objects.filter(brand=self.get_object())
+        return context
