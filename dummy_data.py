@@ -72,4 +72,4 @@ def seed_reviews(n):
         )
 
 
-seed_reviews(500)
+seed_product(100)
