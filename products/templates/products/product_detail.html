@@ -69,14 +69,12 @@
                                 <a href="#">(3 reviews)</a>
                             </div>
                             <h3 class="details-price">
-                                <del>$38.00</del>
-                                <span>$24.00<small>/per kilo</small></span>
+                                <span>${{object.price}}</span>
                             </h3>
                             <p class="details-desc">{{object.subtitle}}</p>
                             <div class="details-list-group">
                                 <label class="details-list-title">tags:</label>
                                 <ul class="details-tag-list">
-                                    
                                     {% for tag in object.tags.all %}
                                     <li><a href="#">{{tag}}</a></li>
                                     {% endfor %}
@@ -137,33 +135,10 @@
                             </div>
                         </div>
                         <div class="product-details-frame">
-                            <h3 class="frame-title">Spacification</h3>
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Product code</th>
-                                        <td>SKU: 101783</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Weight</th>
-                                        <td>1kg, 2kg</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Styles</th>
-                                        <td>@Girly</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Properties</th>
-                                        <td>Short Dress</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="product-details-frame">
                             <h3 class="frame-title">Reviews (2)</h3>
                             <ul class="review-list">
                                 
-                                {% for review in reviews %}
+                                {% for review in object.product_review.all %}
                                     
                                 <li class="review-item">
                                     <div class="review-media">
@@ -183,13 +158,10 @@
                                         <li class="icofont-ui-rate-blank"></li>
                                     </ul>
                                     <p class="review-desc">{{review.review}}</p>
-                                    <form class="review-reply">
-                                        <input type="text" placeholder="reply your thoughts">
-                                        <button><i class="icofont-reply"></i>reply</button>
-                                    </form>
                                 </li>
                             
                                 {% endfor %}
+
                             </ul>
                         </div>
                         <div class="product-details-frame">
