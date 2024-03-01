@@ -1,5 +1,8 @@
 Products:
- - API for products
+ - queryset API: models
+ - add review
+ - custom filter
+ - code refactor
 
 
 Orders:
