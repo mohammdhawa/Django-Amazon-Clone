@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import ProductListView, ProductDetailView, BrandListView, BrandDetailView
+from .views import ProductListView, ProductDetailView, BrandListView, BrandDetailView, mydebug
 from .api import ProductListAPI, ProductDetailAPI, BrandListAPI, BrandDetailAPI
 
 urlpatterns = [
+    path('mydebug/', mydebug, name='mydebug'),
     path('brands/', BrandListView.as_view(), name='brand_list'),
     path('brands/<slug:slug>/', BrandDetailView.as_view(), name='brand_detail'),
 
