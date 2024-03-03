@@ -37,10 +37,12 @@ class Product(models.Model):
         verbose_name = "product"
         verbose_name_plural = "products"
 
+    @property
     def reviews_count(self):
         reviews = self.product_review.all().count()
         return reviews
 
+    @property
     def avg_rate(self):
         reviews = self.product_review.all()
         if reviews:
