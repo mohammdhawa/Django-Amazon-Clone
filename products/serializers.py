@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Product, Brand, Review, ProductImages
+from taggit.serializers import (TagListSerializerField,
+                                TaggitSerializer)
 
 
 class ProductImagesSerializer(serializers.ModelSerializer):
@@ -16,28 +18,26 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ("user", "review", "rate", "created_at")
 
 
-class ProductListSerializer(serializers.ModelSerializer):
+class ProductListSerializer(TaggitSerializer, serializers.ModelSerializer):
     brand = serializers.StringRelatedField()
+    tags = TagListSerializerField()
 
     class Meta:
         model = Product
         fields = ('name', 'flag', 'price', 'image', 'sku', 'subtitle', 'description',
-                  'brand', 'reviews_count', 'avg_rate')
+                  'brand', 'reviews_count', 'avg_rate', 'tags')
 
 
-class ProductDetailSerializer(serializers.ModelSerializer):
+class ProductDetailSerializer(TaggitSerializer, serializers.ModelSerializer):
     brand = serializers.StringRelatedField()
     images = ProductImagesSerializer(source='product_images', many=True)
-    reviews = serializers.SerializerMethodField()
+    reviews = ReviewSerializer(source='product_review', many=True)
+    tags = TagListSerializerField()
 
     class Meta:
         model = Product
         fields = ('name', 'flag', 'price', 'image', 'sku', 'subtitle', 'description',
-                  'brand', 'reviews_count', 'avg_rate', 'images', 'reviews')
-
-    def get_reviews(self, obj):
-        reviews = obj.product_review.all()
-        return ReviewSerializer(reviews, many=True).data
+                  'brand', 'reviews_count', 'avg_rate', 'images', 'reviews', 'tags')
 
 
 class BrandListSerializer(serializers.ModelSerializer):
