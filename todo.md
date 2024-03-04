@@ -1,8 +1,3 @@
-Products:
- - customize home page
- - add review
-
-
 Orders:
  - design models
  - add views for orders
