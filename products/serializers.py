@@ -24,7 +24,7 @@ class ProductListSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('name', 'flag', 'price', 'image', 'sku', 'subtitle', 'description',
+        fields = ('id', 'name', 'flag', 'price', 'image', 'sku', 'subtitle', 'description',
                   'brand', 'reviews_count', 'avg_rate', 'tags')
 
 
@@ -36,7 +36,7 @@ class ProductDetailSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('name', 'flag', 'price', 'image', 'sku', 'subtitle', 'description',
+        fields = ('id', 'name', 'flag', 'price', 'image', 'sku', 'subtitle', 'description',
                   'brand', 'reviews_count', 'avg_rate', 'images', 'reviews', 'tags')
 
 
