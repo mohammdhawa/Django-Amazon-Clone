@@ -1,10 +1,17 @@
 from django.shortcuts import render
-# from .models import Order
+from .models import Order, OrderDetail, Cart, CartDetail, Coupon
+
 
 # Create your views here.
 
-# def order_list(request):
-#     data = Order.objects.all().order_by('price') # 1 ==> sql --> db : lazy
-#
-#     data = Order.objects.all() # queryset cache
-#     data2 = data.filter(price__gte=30)
+def order_list(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'orders/order_list.html', {'orders': orders})
+
+
+def checkout(request):
+    return render(request, 'orders/checkout.html', {})
+
+
+def invoice(request):
+    return render(request, 'orders/invoice.html', {})
