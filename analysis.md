@@ -46,3 +46,18 @@ Users:
     - dashboard
     - profile
     - edit profile
+ ---
+
+Orders:
+ - address
+ - product
+ - brand
+ - price
+ - quantity
+ - order time
+ - delivery time
+ - order id
+ - total item
+ - discount
+ - delivery fee
+ - status (received, processed, shipped, delivered)
