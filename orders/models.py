@@ -21,8 +21,8 @@ class Order(models.Model):
     code = models.CharField(max_length=8, default=generate_code, unique=True)
     order_time = models.DateTimeField(default=timezone.now)
     delivery_time = models.DateTimeField(null=True, blank=True)
-    delivery_address = models.ForeignKey(Address, related_name='delivery_address', on_delete=models.SET_NULL)
-    coupon = models.ForeignKey('Coupons', related_name='order_coupon', on_delete=models.SET_NULL, null=True, blank=True)
+    delivery_address = models.ForeignKey(Address, related_name='delivery_address', on_delete=models.SET_NULL, null=True, blank=True)
+    coupon = models.ForeignKey('Coupon', related_name='order_coupon', on_delete=models.SET_NULL, null=True, blank=True)
     total = models.FloatField()
     total_with_coupon = models.FloatField(null=True, blank=True)
 
@@ -42,6 +42,35 @@ class OrderDetail(models.Model):
     quantity = models.IntegerField()
     price = models.FloatField()
     total = models.FloatField()
+
+
+CART_STATUS = (
+    ('Inprogress', 'Inprogress'),
+    ('Completed', 'Completed'),
+)
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, related_name='cart_owner', on_delete=models.SET_NULL, null=True)
+    status = models.CharField(choices=CART_STATUS, max_length=15)
+    coupon = models.ForeignKey('Coupon', related_name='cart_coupon', on_delete=models.SET_NULL, null=True, blank=True)
+    total_with_coupon = models.FloatField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # Attempt to save the order
+        try:
+            super().save(*args, **kwargs)
+        except IntegrityError:
+            self.code = generate_code()
+            super().save(*args, **kwargs)
+
+
+class CartDetail(models.Model):
+    cart = models.ForeignKey(Cart, related_name='cart_detail', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='cartdetail_product', on_delete=models.SET_NULL, null=True,
+                                blank=True)
+    quantity = models.IntegerField(default=1)
+    total = models.FloatField(null=True, blank=True)
 
 
 class Coupon(models.Model):
