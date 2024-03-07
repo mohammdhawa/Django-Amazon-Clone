@@ -56,13 +56,6 @@ class Cart(models.Model):
     coupon = models.ForeignKey('Coupon', related_name='cart_coupon', on_delete=models.SET_NULL, null=True, blank=True)
     total_with_coupon = models.FloatField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        # Attempt to save the order
-        try:
-            super().save(*args, **kwargs)
-        except IntegrityError:
-            self.code = generate_code()
-            super().save(*args, **kwargs)
 
     @property
     def cart_total(self):
@@ -70,7 +63,7 @@ class Cart(models.Model):
         for item in self.cart_detail.all():
             if item.total:
                 total += item.total
-        return total
+        return round(total, 2)
 
 
 class CartDetail(models.Model):
