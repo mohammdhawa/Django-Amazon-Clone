@@ -1,6 +1,4 @@
 Orders:
- - add checkout
- - add coupons
  - API for orders & cart
 
 
