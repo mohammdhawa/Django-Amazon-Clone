@@ -9,7 +9,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    order = OrderDetailSerializer(many=True)
+    order_detail = OrderDetailSerializer(many=True)
 
     class Meta:
         model = Order
@@ -23,7 +23,7 @@ class CartDetailSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    cart = CartDetailSerializer(many=True)
+    cart_detail = CartDetailSerializer(many=True)
 
     class Meta:
         model = Cart
