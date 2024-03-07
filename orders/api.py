@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from products.models import Product
 from settings.models import DeliveryFee
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+import datetime
+from rest_framework.response import Response
 
 
 class OrderListAPI(generics.ListAPIView):
@@ -37,3 +40,31 @@ class OrderListAPI(generics.ListAPIView):
 class OrderDetailAPI(generics.RetrieveAPIView):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
+
+
+class ApplyCouponAPI(generics.GenericAPIView):
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(username=self.kwargs['username']) # Url
+        coupon = get_object_or_404(Coupon, code=request.data['coupon']) # request body
+        delivery_fee = DeliveryFee.objects.last().fee
+        cart = Cart.objects.get(user=user, status="Inprogress")
+
+        if coupon and coupon.quantity > 0:
+            today_date = datetime.datetime.today().date()
+            if coupon.start_date <= today_date <= coupon.end_date:
+                coupon_value = cart.cart_total / 100 * coupon.discount
+                subtotal = cart.cart_total - coupon_value
+                total = subtotal + delivery_fee
+                cart.coupon = coupon
+                cart.total_with_coupon = subtotal
+                cart.save()
+
+                coupon.quantity -= 1
+                coupon.save()
+
+                return Response({'message': 'Coupon was applied successfully'})
+            else:
+                return Response({'message': 'Coupon is Invalid or Expired'})
+
+        return Response({'message': 'Coupon not found'})
