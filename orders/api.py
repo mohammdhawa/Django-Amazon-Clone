@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 import datetime
 from rest_framework.response import Response
+from accounts.models import Address
+from rest_framework import status
 
 
 class OrderListAPI(generics.ListAPIView):
@@ -67,4 +69,53 @@ class ApplyCouponAPI(generics.GenericAPIView):
             else:
                 return Response({'message': 'Coupon is Invalid or Expired'})
 
-        return Response({'message': 'Coupon not found'})
+        return Response({'message': 'Coupon not found'}, status=status.HTTP_200_OK)
+
+
+class CreateOrder(generics.GenericAPIView):
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(username=self.kwargs['username'])
+        code = request.data['payment_code']
+        address = request.data['address_id']
+        cart = Cart.objects.get(user=user, status="Inprogress")
+        cart_detail = CartDetail.objects.filter(cart=cart)
+        user_address = Address.objects.get(id=address)
+
+        # cart: order | cart_detail: order detail
+        new_order = Order.objects.create(
+            user=user,
+            status="Recieved",
+            code=code,
+            delivery_address=user_address,
+            coupon=cart.coupon,
+            total=cart.total,
+            total_with_coupon=cart.total_with_coupon
+        )
+
+        # Order Detail
+        for item in cart_detail:
+            product = Product.objects.get(id=item.product.id)
+            OrderDetail.objects.create(
+                order=new_order,
+                product=product,
+                quantity=item.quantity,
+                price=product.price,
+                total=rount(item.quantity * product.price, 2)
+            )
+
+            # decrease product quantity
+            product.quantity -= 1
+            product.save()
+
+        # close cart
+        cart.status = "Completed"
+        cart.save()
+
+        # send email to user
+
+        return Response({'message': 'Order was created successfully'}, status=status.HTTP_201_CREATED)
+
+
+class CartCreateUpdateDelete(generics.GenericAPIView):
+    pass
