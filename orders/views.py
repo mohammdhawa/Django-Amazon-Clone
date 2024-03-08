@@ -37,7 +37,7 @@ def checkout(request):
                 coupon.quantity -= 1
                 coupon.save()
 
-                return render(request, 'orders/checkout.html', {
+                return render(request,  'orders/checkout.html', {
                     'cart_detail': cart_detail,
                     'delivery_fee': delivery_fee,
                     'subtotal': round(subtotal, 2),
