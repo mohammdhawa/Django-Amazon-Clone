@@ -17,6 +17,9 @@ class ReviewAdmin(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesAdmin, ReviewAdmin]
+    list_display = ('name', 'id', 'quantity')
+    list_filter = ('flag', )
+    search_fields = ('name', 'sku', 'id')
 
 
 admin.site.register(Product, ProductAdmin)
