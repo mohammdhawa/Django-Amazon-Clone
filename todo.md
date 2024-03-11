@@ -1,7 +1,3 @@
-Orders:
- - API for orders & cart
-
-
 Users:
  - design models
  - add templates
@@ -16,3 +12,7 @@ Intermediate:
  - Ajax
  - Linting
  - Deploy
+ - translation
+
+Interview:
+ - multiple type user
